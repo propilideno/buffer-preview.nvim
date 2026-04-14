@@ -25,8 +25,8 @@
 - Neovim >= 0.10
 - [image.nvim](https://github.com/3rd/image.nvim) (handles image rendering)
 - ImageMagick (required by image.nvim)
-- `pdftoppm` **or** `pdftocairo` (from `poppler-utils`)
-- `qpdf` (for page count; optional - falls back to `pdfinfo`)
+- `pdftoppm` **or** `pdftocairo` (from `poppler` / `poppler-utils`)
+- `pdfinfo` (from `poppler` / `poppler-utils`)
 
 ## Installation
 
@@ -45,7 +45,13 @@ With [lazy.nvim](https://github.com/folke/lazy.nvim):
 ### Arch Linux
 
 ```sh
-sudo pacman -S poppler qpdf imagemagick
+sudo pacman -S poppler imagemagick
+```
+
+### Ubuntu / Debian
+
+```sh
+sudo apt install poppler-utils imagemagick
 ```
 
 
@@ -95,7 +101,7 @@ require("buffer-preview").setup({
 
 For PDFs, the backend:
 
-1. Detects page count with `qpdf` or `pdfinfo`
+1. Detects page count with `pdfinfo`
 2. Rasterizes pages to PNG with `pdftoppm` or `pdftocairo`
 3. Displays the page with `image.nvim`
 4. Uses page-navigation mappings instead of normal text editing

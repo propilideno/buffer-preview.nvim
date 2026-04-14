@@ -8,23 +8,13 @@ local M = {}
 ---@param pdf_path string
 ---@return number|nil
 function M.get_page_count(pdf_path)
-  -- Try qpdf first (fast, dedicated tool)
-  local result = vim.fn.system({ "qpdf", "--show-npages", pdf_path })
+  local result = vim.fn.system({ "pdfinfo", pdf_path })
   if vim.v.shell_error == 0 then
-    local count = tonumber(vim.trim(result))
-    if count then
-      return count
-    end
-  end
-
-  -- Fallback: pdfinfo (from poppler-utils)
-  result = vim.fn.system(
-    "pdfinfo " .. vim.fn.shellescape(pdf_path) .. " 2>/dev/null | grep '^Pages:' | awk '{print $2}'"
-  )
-  if vim.v.shell_error == 0 then
-    local count = tonumber(vim.trim(result))
-    if count then
-      return count
+    for _, line in ipairs(vim.split(result, "\n")) do
+      local pages = line:match("^Pages:%s*(%d+)")
+      if pages then
+        return tonumber(pages)
+      end
     end
   end
 

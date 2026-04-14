@@ -23,7 +23,7 @@ implements PDF preview, with image rendering delegated to image.nvim.
 - image.nvim (https://github.com/3rd/image.nvim)
 - ImageMagick (required by image.nvim)
 - `pdftoppm` or `pdftocairo` (poppler-utils)
-- `qpdf` (optional, for page count - falls back to `pdfinfo`)
+- `pdfinfo` (for page count)
 
 ==============================================================================
 3. Configuration                    *buffer-preview-configuration*
