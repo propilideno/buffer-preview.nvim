@@ -27,7 +27,7 @@ With [lazy.nvim](https://github.com/folke/lazy.nvim):
 ```lua
 {
   "propilideno/buffer-preview.nvim",
-  ft = "pdf",
+  ft = { "pdf" },
   dependencies = { "3rd/image.nvim" },
   opts = {},
 }
