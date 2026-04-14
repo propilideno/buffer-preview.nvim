@@ -1,16 +1,24 @@
 # buffer-preview.nvim
 
-`buffer-preview.nvim` is a Neovim plugin for previewing non-text formats by
-hijacking normal buffer reads.
+<p align="center">
+  Give your Neovim buffers real previews instead of raw file bytes.
+</p>
 
-Instead of opening supported files as editable text or showing raw bytes, the
-plugin intercepts the buffer load with `BufReadCmd`, replaces it with a
-read-only preview buffer, and renders a format-specific view in-place.
+<p align="center">
+  <img src="assets/example.png" alt="buffer-preview.nvim rendering a PDF directly inside a Neovim buffer" />
+</p>
 
-Today, opening a PDF hijacks the PDF buffer and shows a rendered page image
-through
-[image.nvim](https://github.com/3rd/image.nvim), so the preview can run on any
-backend image.nvim supports: **Kitty**, **ueberzug++**, and **sixel**.
+<p align="center">
+  <code>buffer-preview.nvim</code> hijacks the normal buffer read for supported
+  files and replaces raw bytes with a read-only, navigable in-buffer preview.
+  Keep the document inside Neovim, move with familiar Vim keys, and avoid
+  context-switching to a separate viewer.
+</p>
+
+<p align="center">
+  <sub>Currently focused on PDFs first, with the same buffer-preview model
+  ready to grow into other non-text formats later.</sub>
+</p>
 
 ## Requirements
 
@@ -60,7 +68,8 @@ require("buffer-preview").setup({
 
 - [x] buffer-hijacking: PDF buffers are hijacked and rendered as page images instead of raw bytes
 - [x] page-viewer: read-only buffer with Vim-style page movement
-- [ ] Image support
+- [x] PDF support (.pdf)
+- [ ] Powerpoint support (.pptx)
 - [ ] Parquet support
 - [ ] Excel support
 
