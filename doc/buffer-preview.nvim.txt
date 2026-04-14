@@ -1,0 +1,56 @@
+*buffer-preview.nvim.txt*    For Neovim >= 0.10.0            Last change: 2026-04-14
+
+==============================================================================
+Table of Contents                                 *buffer-preview.nvim-toc*
+
+1. buffer-preview.nvim            |buffer-preview-introduction|
+2. Requirements                   |buffer-preview-requirements|
+3. Configuration                  |buffer-preview-configuration|
+4. Navigation                     |buffer-preview-navigation|
+
+==============================================================================
+1. buffer-preview.nvim              *buffer-preview-introduction*
+
+buffer-preview.nvim previews non-text content by hijacking normal buffer reads.
+Instead of opening supported files as editable text, it intercepts the load and
+replaces the buffer with a read-only preview buffer. Phase 1 currently
+implements PDF preview, with image rendering delegated to image.nvim.
+
+==============================================================================
+2. Requirements                     *buffer-preview-requirements*
+
+- Neovim >= 0.10
+- image.nvim (https://github.com/3rd/image.nvim)
+- ImageMagick (required by image.nvim)
+- `pdftoppm` or `pdftocairo` (poppler-utils)
+- `qpdf` (optional, for page count - falls back to `pdfinfo`)
+
+==============================================================================
+3. Configuration                    *buffer-preview-configuration*
+
+Call: >
+    require("buffer-preview").setup({...})
+
+Current options configure the phase-1 PDF backend: >
+
+    require("buffer-preview").setup({
+      rasterizer = "pdftoppm",              -- or "pdftocairo"
+      dpi = 200,                            -- rasterization DPI
+      cache_dir = vim.fn.stdpath("cache")
+                  .. "/buffer-preview.nvim", -- rendered page cache
+    })
+
+==============================================================================
+4. Navigation                       *buffer-preview-navigation*
+
+The PDF buffer is non-editable.  Only the following keys are active:
+
+  j, l, <Down>, ], }, <Space>, <C-d>, <C-f>    Next page
+  k, h, <Up>, [, {, <C-u>, <C-b>               Previous page
+  g                                             First page
+  G                                             Last page
+  {count}G                                      Go to page {count}
+  r, <C-l>                                      Refresh display
+  q                                             Close viewer
+
+vim:tw=78:ts=8:noet:ft=help:norl:
