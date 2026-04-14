@@ -27,7 +27,8 @@ With [lazy.nvim](https://github.com/folke/lazy.nvim):
 ```lua
 {
   "propilideno/buffer-preview.nvim",
-  ft = { "pdf" },
+  -- ft = { "pdf" },
+  event = "BufReadCmd *.pdf", -- fires before Neovim reads the file, earlier than ft
   dependencies = { "3rd/image.nvim" },
   opts = {},
 }
