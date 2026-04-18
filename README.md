@@ -20,6 +20,15 @@
   ready to grow into other non-text formats later.</sub>
 </p>
 
+
+<a href="https://www.star-history.com/?repos=propilideno%2Fbuffer-preview.nvim&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=propilideno/buffer-preview.nvim&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=propilideno/buffer-preview.nvim&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=propilideno/buffer-preview.nvim&type=date&legend=top-left" />
+ </picture>
+</a>
+
 ## Requirements
 
 - Neovim >= 0.10
