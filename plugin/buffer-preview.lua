@@ -1,6 +1,6 @@
 --- buffer-preview.nvim — hijack supported buffers as image viewers.
 local group = vim.api.nvim_create_augroup("BufferPreviewNvim", { clear = true })
-local patterns = { "*.pdf", "*.pptx" }
+local patterns = { "*.pdf", "*.pptx", "*.ppt", "*.odp" }
 
 -- Primary path: intercept the buffer before Neovim reads raw bytes.
 vim.api.nvim_create_autocmd("BufReadCmd", {
@@ -25,7 +25,7 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
       return
     end
     local path = vim.api.nvim_buf_get_name(buf)
-    if path ~= "" and (path:match("%.pdf$") or path:match("%.pptx$")) then
+    if path ~= "" and (path:match("%.pdf$") or path:match("%.pptx$") or path:match("%.ppt$") or path:match("%.odp$")) then
       require("buffer-preview.viewer").open(path)
     end
   end,

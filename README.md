@@ -30,7 +30,7 @@
 - ImageMagick (required by image.nvim)
 - `pdftoppm` **or** `pdftocairo` (from `poppler` / `poppler-utils`)
 - `pdfinfo` (from `poppler` / `poppler-utils`)
-- `soffice` for `.pptx` preview conversion
+- `soffice` for presentation preview conversion (`.pptx`, `.ppt`, `.odp`)
 
 ## Installation
 
@@ -39,8 +39,7 @@ With [lazy.nvim](https://github.com/folke/lazy.nvim):
 ```lua
 {
   "propilideno/buffer-preview.nvim",
-  -- Or: ft = { "pdf", "pptx" },
-  event = { "BufReadCmd *.pdf", "BufReadCmd *.pptx" }, -- fires before Neovim reads the file, earlier than ft
+  event = { "BufReadCmd *.pdf", "BufReadCmd *.pptx", "BufReadCmd *.ppt", "BufReadCmd *.odp" }, -- fires before Neovim reads the file, earlier than ft
   dependencies = { "3rd/image.nvim" },
   opts = {},
 }
@@ -49,13 +48,15 @@ With [lazy.nvim](https://github.com/folke/lazy.nvim):
 ### Arch Linux
 
 ```sh
-sudo pacman -S poppler imagemagick libreoffice-fresh
+sudo pacman -S poppler imagemagick \
+               libreoffice-fresh # Optional: for presentation preview
 ```
 
 ### Ubuntu / Debian
 
 ```sh
-sudo apt install poppler-utils imagemagick libreoffice
+sudo apt install poppler-utils imagemagick \
+                 libreoffice # Optional: for presentation preview
 ```
 
 
@@ -79,7 +80,8 @@ require("buffer-preview").setup({
 - [x] buffer-hijacking: supported buffers are hijacked and rendered as previews instead of raw bytes
 - [x] page-viewer: read-only buffer with Vim-style page movement
 - [x] PDF support (.pdf)
-- [x] PowerPoint support (.pptx)
+- [x] PowerPoint support (.pptx, .ppt)
+- [x] OpenDocument Presentation support (.odp)
 - [ ] Parquet support
 - [ ] Excel support
 
@@ -110,7 +112,7 @@ For PDFs, the backend:
 3. Displays the page with `image.nvim`
 4. Uses page-navigation mappings instead of normal text editing
 
-For `.pptx`, the backend:
+For presentation files (`.pptx`, `.ppt`, `.odp`), the backend:
 
 1. Converts the presentation to PDF with `soffice --headless`
 2. Reuses the same PDF page-count, rasterization, and display pipeline
@@ -119,7 +121,7 @@ For `.pptx`, the backend:
 ## Architecture
 
 - `plugin/buffer-preview.lua`: registers buffer hijacking for supported formats
-- `lua/buffer-preview/converter.lua`: converts `.pptx` to cached PDF with `soffice`
+- `lua/buffer-preview/converter.lua`: converts presentation files to cached PDF with `soffice`
 - `lua/buffer-preview/viewer.lua`: PDF preview buffer lifecycle
 - `lua/buffer-preview/rasterizer.lua`: PDF page rasterization and cache
 - `lua/buffer-preview/display.lua`: image rendering via `image.nvim`

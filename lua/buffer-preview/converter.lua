@@ -39,7 +39,7 @@ end
 function M.presentation_to_pdf(source_path)
   local soffice = soffice_binary()
   if not soffice then
-    return nil, "buffer-preview.nvim: soffice is required to preview .pptx files"
+    return nil, "buffer-preview.nvim: soffice is required to preview presentation files"
   end
 
   local absolute_path = vim.fn.fnamemodify(source_path, ":p")
@@ -63,7 +63,7 @@ function M.presentation_to_pdf(source_path)
 
   vim.fn.system(cmd)
   if vim.v.shell_error ~= 0 then
-    return nil, "buffer-preview.nvim: failed to convert .pptx to PDF with soffice"
+    return nil, "buffer-preview.nvim: failed to convert the presentation to PDF with soffice"
   end
 
   if vim.fn.filereadable(output_path) ~= 1 then
@@ -84,7 +84,7 @@ function M.to_pdf(source_path)
     return absolute_path, nil
   end
 
-  if extension == "pptx" then
+  if extension == "pptx" or extension == "ppt" or extension == "odp" then
     return M.presentation_to_pdf(absolute_path)
   end
 
