@@ -1,5 +1,6 @@
 --- PDF viewer buffer management for buffer-preview.nvim phase 1.
 --- Handles buffer hijacking, keymaps, page state, and display lifecycle.
+local converter = require("buffer-preview.converter")
 local rasterizer = require("buffer-preview.rasterizer")
 local display = require("buffer-preview.display")
 
@@ -7,6 +8,7 @@ local M = {}
 
 --- Per-buffer viewer state.
 ---@class buffer-preview.ViewerState
+---@field source_path string
 ---@field pdf_path string
 ---@field page_count number
 ---@field current_page number
@@ -34,7 +36,7 @@ local function update_status(state)
   end
 
   local height = vim.api.nvim_win_get_height(win)
-  local filename = vim.fn.fnamemodify(state.pdf_path, ":t")
+  local filename = vim.fn.fnamemodify(state.source_path, ":t")
   local status = string.format(
     "  %s  |  Page %d / %d  |  q:close  j/k:page  g/G:first/last  <num>G:goto",
     filename,
@@ -201,13 +203,13 @@ end
 -- Public API
 ---------------------------------------------------------------------------
 
---- Open a PDF file in the current buffer as a read-only image viewer.
----@param pdf_path string Path to the PDF file (may be relative)
-function M.open(pdf_path)
-  pdf_path = vim.fn.fnamemodify(pdf_path, ":p")
+--- Open a supported file in the current buffer as a read-only image viewer.
+---@param source_path string Path to the source file (may be relative)
+function M.open(source_path)
+  source_path = vim.fn.fnamemodify(source_path, ":p")
 
-  if vim.fn.filereadable(pdf_path) ~= 1 then
-    vim.notify("buffer-preview.nvim: file not found: " .. pdf_path, vim.log.levels.ERROR)
+  if vim.fn.filereadable(source_path) ~= 1 then
+    vim.notify("buffer-preview.nvim: file not found: " .. source_path, vim.log.levels.ERROR)
     return
   end
 
@@ -219,9 +221,15 @@ function M.open(pdf_path)
     return
   end
 
+  local pdf_path, convert_error = converter.to_pdf(source_path)
+  if not pdf_path then
+    vim.notify(convert_error, vim.log.levels.ERROR)
+    return
+  end
+
   local page_count = rasterizer.get_page_count(pdf_path)
   if not page_count or page_count < 1 then
-    vim.notify("buffer-preview.nvim: could not determine page count for " .. pdf_path, vim.log.levels.ERROR)
+    vim.notify("buffer-preview.nvim: could not determine page count for " .. source_path, vim.log.levels.ERROR)
     return
   end
 
@@ -247,6 +255,7 @@ function M.open(pdf_path)
   vim.wo[win].statuscolumn = ""
 
   local state = {
+    source_path = source_path,
     pdf_path = pdf_path,
     page_count = page_count,
     current_page = 1,

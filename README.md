@@ -15,12 +15,6 @@
   context-switching to a separate viewer.
 </p>
 
-<p align="center">
-  <sub>Currently focused on PDFs first, with the same buffer-preview model
-  ready to grow into other non-text formats later.</sub>
-</p>
-
-
 <a href="https://www.star-history.com/?repos=propilideno%2Fbuffer-preview.nvim&type=date&legend=top-left">
  <picture>
    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=propilideno/buffer-preview.nvim&type=date&theme=dark&legend=top-left" />
@@ -36,6 +30,7 @@
 - ImageMagick (required by image.nvim)
 - `pdftoppm` **or** `pdftocairo` (from `poppler` / `poppler-utils`)
 - `pdfinfo` (from `poppler` / `poppler-utils`)
+- `soffice` for `.pptx` preview conversion
 
 ## Installation
 
@@ -44,8 +39,8 @@ With [lazy.nvim](https://github.com/folke/lazy.nvim):
 ```lua
 {
   "propilideno/buffer-preview.nvim",
-  -- ft = { "pdf" },
-  event = "BufReadCmd *.pdf", -- fires before Neovim reads the file, earlier than ft
+  -- Or: ft = { "pdf", "pptx" },
+  event = { "BufReadCmd *.pdf", "BufReadCmd *.pptx" }, -- fires before Neovim reads the file, earlier than ft
   dependencies = { "3rd/image.nvim" },
   opts = {},
 }
@@ -54,19 +49,19 @@ With [lazy.nvim](https://github.com/folke/lazy.nvim):
 ### Arch Linux
 
 ```sh
-sudo pacman -S poppler imagemagick
+sudo pacman -S poppler imagemagick libreoffice-fresh
 ```
 
 ### Ubuntu / Debian
 
 ```sh
-sudo apt install poppler-utils imagemagick
+sudo apt install poppler-utils imagemagick libreoffice
 ```
 
 
 ## Default Configuration
 
-All fields are optional. These currently configure the PDF backend.
+All fields are optional. These currently configure the PDF rendering backend.
 
 ```lua
 require("buffer-preview").setup({
@@ -81,10 +76,10 @@ require("buffer-preview").setup({
 
 ## Features
 
-- [x] buffer-hijacking: PDF buffers are hijacked and rendered as page images instead of raw bytes
+- [x] buffer-hijacking: supported buffers are hijacked and rendered as previews instead of raw bytes
 - [x] page-viewer: read-only buffer with Vim-style page movement
 - [x] PDF support (.pdf)
-- [ ] Powerpoint support (.pptx)
+- [x] PowerPoint support (.pptx)
 - [ ] Parquet support
 - [ ] Excel support
 
@@ -115,9 +110,16 @@ For PDFs, the backend:
 3. Displays the page with `image.nvim`
 4. Uses page-navigation mappings instead of normal text editing
 
+For `.pptx`, the backend:
+
+1. Converts the presentation to PDF with `soffice --headless`
+2. Reuses the same PDF page-count, rasterization, and display pipeline
+3. Keeps the same in-buffer navigation and `Page` layout
+
 ## Architecture
 
 - `plugin/buffer-preview.lua`: registers buffer hijacking for supported formats
+- `lua/buffer-preview/converter.lua`: converts `.pptx` to cached PDF with `soffice`
 - `lua/buffer-preview/viewer.lua`: PDF preview buffer lifecycle
 - `lua/buffer-preview/rasterizer.lua`: PDF page rasterization and cache
 - `lua/buffer-preview/display.lua`: image rendering via `image.nvim`
