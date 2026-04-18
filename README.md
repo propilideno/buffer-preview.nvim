@@ -83,11 +83,11 @@ require("buffer-preview").setup({
 
 | Key                                              | Action        |
 | ------------------------------------------------ | ------------- |
-| `j` `l` `↓` `]` `}` `Space` `Ctrl-d` `Ctrl-f`  | Next page     |
-| `k` `h` `↑` `[` `{` `Ctrl-u` `Ctrl-b`          | Previous page |
+| `j` `l` `↓` `]` `}` `Space` `Ctrl-d` `Ctrl-f`    | Next page     |
+| `k` `h` `↑` `[` `{` `Ctrl-u` `Ctrl-b`            | Previous page |
 | `g`                                              | First page    |
 | `G`                                              | Last page     |
-| `<count>G`                                       | Go to page N  |
+| `<number>G`                                      | Go to page N  |
 | `r` `Ctrl-l`                                     | Refresh       |
 | `q`                                              | Close viewer  |
 

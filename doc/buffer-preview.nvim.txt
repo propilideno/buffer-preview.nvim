@@ -31,7 +31,7 @@ implements PDF preview, with image rendering delegated to image.nvim.
 Call: >
     require("buffer-preview").setup({...})
 
-Current options configure the phase-1 PDF backend: >
+Current options configure the backend: >
 
     require("buffer-preview").setup({
       rasterizer = "pdftoppm",              -- or "pdftocairo"
@@ -45,11 +45,11 @@ Current options configure the phase-1 PDF backend: >
 
 The PDF buffer is non-editable.  Only the following keys are active:
 
-  j, l, <Down>, ], }, <Space>, <C-d>, <C-f>    Next page
-  k, h, <Up>, [, {, <C-u>, <C-b>               Previous page
+  j, l, <Down>, ], }, <Space>, <C-d>, <C-f>     Next page
+  k, h, <Up>, [, {, <C-u>, <C-b>                Previous page
   g                                             First page
   G                                             Last page
-  {count}G                                      Go to page {count}
+  {number}G                                     Go to page {number}
   r, <C-l>                                      Refresh display
   q                                             Close viewer
 
