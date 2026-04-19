@@ -32,11 +32,11 @@
 - `pdftoppm` **or** `pdftocairo` (from `poppler` / `poppler-utils`)
 - `pdfinfo` (from `poppler` / `poppler-utils`)
 
-### Optional: presentation
+#### Optional: presentation
 
 - `soffice` for presentation preview conversion (`.pptx`, `.ppt`, `.odp`)
 
-### Optional: tmux support
+#### Optional: tmux support
 
 ~/.tmux.conf
 
@@ -60,14 +60,14 @@ With [lazy.nvim](https://github.com/folke/lazy.nvim):
 }
 ```
 
-### Arch Linux
+#### Arch Linux
 
 ```sh
 sudo pacman -S poppler imagemagick \
                libreoffice-fresh # Optional: for presentation preview
 ```
 
-### Ubuntu / Debian
+#### Ubuntu / Debian
 
 ```sh
 sudo apt install poppler-utils imagemagick \
