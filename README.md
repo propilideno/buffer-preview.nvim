@@ -31,7 +31,21 @@
 - ImageMagick (required by image.nvim)
 - `pdftoppm` **or** `pdftocairo` (from `poppler` / `poppler-utils`)
 - `pdfinfo` (from `poppler` / `poppler-utils`)
+
+### Optional: presentation
+
 - `soffice` for presentation preview conversion (`.pptx`, `.ppt`, `.odp`)
+
+### Optional: tmux support
+
+~/.tmux.conf
+
+```tmux
+# https://github.com/3rd/image.nvim#tmux
+set -gq allow-passthrough on
+set -g visual-activity off
+set -g focus-events on
+```
 
 ## Installation
 
@@ -59,7 +73,6 @@ sudo pacman -S poppler imagemagick \
 sudo apt install poppler-utils imagemagick \
                  libreoffice # Optional: for presentation preview
 ```
-
 
 ## Default Configuration
 
