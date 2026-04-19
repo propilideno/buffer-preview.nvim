@@ -5,7 +5,8 @@
 </p>
 
 <p align="center">
-  <img src="assets/example.png" alt="buffer-preview.nvim rendering a PDF directly inside a Neovim buffer" />
+  <img src="assets/example-pdf.png" alt="buffer-preview.nvim rendering a PDF directly inside a Neovim buffer" width="50%" />
+  <img src="assets/example-presentation.png" alt="buffer-preview.nvim rendering a PDF directly inside a Neovim buffer" width="49%" />
 </p>
 
 <p align="center">
