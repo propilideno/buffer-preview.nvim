@@ -83,6 +83,7 @@ require("buffer-preview").setup({
 - [x] PDF support (.pdf)
 - [x] PowerPoint support (.pptx, .ppt)
 - [x] OpenDocument Presentation support (.odp)
+- [ ] SQLite support
 - [ ] Parquet support
 - [ ] Excel support
 
