@@ -100,14 +100,14 @@ describe("buffer-preview.data.viewer", function()
     assert.is_truthy(top_text:match("t"))
   end)
 
-  test("runs the query from the bottom buffer and updates only the top", function()
+  test("runs the query on :w and updates only the top", function()
     local state = data_viewer.open(db)
 
     local sql = { "SELECT * FROM t ORDER BY id;" }
     vim.api.nvim_buf_set_lines(state.bottom_buf, 0, -1, false, sql)
 
     vim.api.nvim_buf_call(state.bottom_buf, function()
-      vim.cmd("BufferPreviewRunQuery")
+      vim.cmd("silent write")
     end)
 
     local top_text = table.concat(vim.api.nvim_buf_get_lines(state.top_buf, 0, -1, false), "\n")
@@ -116,6 +116,7 @@ describe("buffer-preview.data.viewer", function()
 
     local bottom_after = vim.api.nvim_buf_get_lines(state.bottom_buf, 0, -1, false)
     assert.are.same(sql, bottom_after)
+    assert.equals(false, vim.bo[state.bottom_buf].modified)
   end)
 
   test("shows success message for write queries", function()

@@ -34,8 +34,7 @@ ORDER BY type, name;
 ]]
 
 local STARTER_HINT = {
-  "-- Write SQL here.",
-  "-- Run with <localleader>r or :BufferPreviewRunQuery",
+  "-- Write SQL here. Save the buffer (:w) to run it.",
   "",
 }
 
@@ -90,16 +89,8 @@ local function setup_bottom(state)
 
   vim.api.nvim_buf_create_user_command(buf, "BufferPreviewRunQuery", function()
     run_query(state)
+    vim.bo[buf].modified = false
   end, { desc = "Run SQL from the buffer-preview.nvim SQLite workspace" })
-
-  vim.keymap.set("n", "<localleader>r", function()
-    run_query(state)
-  end, {
-    buffer = buf,
-    noremap = true,
-    silent = true,
-    desc = "buffer-preview.nvim: run SQL query",
-  })
 end
 
 ---@param state buffer-preview.SqliteState
@@ -132,6 +123,17 @@ local function setup_autocmds(state)
     buffer = state.bottom_buf,
     callback = teardown,
   })
+
+  -- `:w` on the SQL buffer runs the query. `acwrite` + BufWriteCmd lets us
+  -- hijack the write without touching disk.
+  vim.api.nvim_create_autocmd("BufWriteCmd", {
+    group = group,
+    buffer = state.bottom_buf,
+    callback = function()
+      run_query(state)
+      vim.bo[state.bottom_buf].modified = false
+    end,
+  })
 end
 
 --- Open a SQLite file in the two-buffer workspace.
@@ -162,11 +164,18 @@ function M.open(source_path)
 
   vim.cmd("belowright new")
   local bottom_buf = vim.api.nvim_get_current_buf()
-  vim.bo[bottom_buf].buftype = "nofile"
+  -- `acwrite` lets `:w` fire BufWriteCmd instead of erroring on "no file name".
+  vim.bo[bottom_buf].buftype = "acwrite"
   vim.bo[bottom_buf].bufhidden = "wipe"
   vim.bo[bottom_buf].swapfile = false
   vim.bo[bottom_buf].filetype = "sql"
+  pcall(
+    vim.api.nvim_buf_set_name,
+    bottom_buf,
+    "buffer-preview://" .. vim.fn.fnamemodify(source_path, ":t") .. "/query.sql"
+  )
   vim.api.nvim_buf_set_lines(bottom_buf, 0, -1, false, STARTER_HINT)
+  vim.bo[bottom_buf].modified = false
 
   local state = {
     db_path = source_path,

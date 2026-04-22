@@ -148,24 +148,12 @@ Opening a `.db` / `.sqlite` / `.sqlite3` file spawns a two-buffer workspace:
 
 | Key / Command                | Action                                    |
 | ---------------------------- | ----------------------------------------- |
-| `<localleader>r`             | Run the whole bottom buffer as SQL        |
+| `:w` (save the buffer)       | Run the whole bottom buffer as SQL        |
 | `:BufferPreviewRunQuery`     | Same as above                             |
 
 The bottom buffer's contents are preserved after a run. Successful write
 statements render `Query executed successfully` in the top buffer; errors
 render `-- Error` followed by the `sqlite3` stderr.
-
-#### Configuration
-`<localleader>` defaults to `<leader>` (which defaults to `\`), so `\r` runs
-the query out of the box. To pick your own key, set `maplocalleader` in your
-`init.lua` **before** the plugin loads:
-
-```lua
--- Example of localleader remapping.
--- init.lua
-vim.g.mapleader = " "      -- space as global leader
-vim.g.maplocalleader = "," -- comma as local leader → ",r" runs the query
-```
 
 ## How It Works
 

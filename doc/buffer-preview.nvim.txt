@@ -85,21 +85,15 @@ Opening a `.db`, `.sqlite`, or `.sqlite3` file spawns a two-buffer workspace:
 
 Running SQL:
 
-  <localleader>r            Run the entire bottom buffer as SQL
+  :w                        Run the entire bottom buffer as SQL
   :BufferPreviewRunQuery    Same as above (buffer-local command)
+
+Saving the SQL buffer with `:w` hijacks the write via |BufWriteCmd| — nothing
+touches disk, the SQL just runs and the result renders into the top buffer.
 
 The bottom buffer's contents are preserved after a run. Successful write
 statements render `Query executed successfully` in the top buffer; errors
 render `-- Error` followed by the `sqlite3` stderr output.
-
-<localleader> defaults to <leader> (which defaults to `\`), so `\r` runs the
-query out of the box. To pick your own key, set `maplocalleader` in your
-init.lua before the plugin loads: >
-
-    vim.g.mapleader = " "      -- space as global leader
-    vim.g.maplocalleader = "," -- ",r" will run the query
-
-See |maplocalleader| for details.
 
 Closing either buffer tears down the workspace.
 
