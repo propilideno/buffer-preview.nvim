@@ -4,7 +4,7 @@ local group = vim.api.nvim_create_augroup("BufferPreviewNvim", { clear = true })
 local backends = {
   {
     patterns = { "*.pdf", "*.pptx", "*.ppt", "*.odp" },
-    module = "buffer-preview.viewer",
+    module = "buffer-preview.image.viewer",
     exts = { "pdf", "pptx", "ppt", "odp" },
   },
   {

@@ -187,10 +187,10 @@ For SQLite files (`.db`, `.sqlite`, `.sqlite3`), the backend:
 ## Architecture
 
 - `plugin/buffer-preview.lua`: dispatches buffer hijacking per backend
-- `lua/buffer-preview/converter.lua`: converts presentation files to cached PDF with `soffice`
-- `lua/buffer-preview/viewer.lua`: PDF / presentation preview buffer lifecycle
-- `lua/buffer-preview/rasterizer.lua`: PDF page rasterization and cache
-- `lua/buffer-preview/display.lua`: image rendering via `image.nvim`
+- `lua/buffer-preview/image/viewer.lua`: PDF / presentation preview buffer lifecycle
+- `lua/buffer-preview/image/converter.lua`: converts presentation files to cached PDF with `soffice`
+- `lua/buffer-preview/image/rasterizer.lua`: PDF page rasterization and cache
+- `lua/buffer-preview/image/display.lua`: image rendering via `image.nvim`
 - `lua/buffer-preview/data/runner.lua`: `sqlite3` CLI wrapper (data backends)
 - `lua/buffer-preview/data/viewer.lua`: two-buffer data workspace
 - `lua/buffer-preview/config.lua`: backend configuration
