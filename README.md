@@ -142,7 +142,7 @@ require("buffer-preview").setup({
 Opening a `.db` / `.sqlite` / `.sqlite3` file spawns a two-buffer workspace:
 
 - **Top** — read-only result preview. Initially shows the database schema
-  (tables, views, indexes, triggers).
+  (tables, views, triggers).
 - **Bottom** — editable SQL buffer. Write any SQL that `sqlite3` accepts,
   including writes and DDL.
 

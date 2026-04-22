@@ -78,7 +78,7 @@ Opening a `.db`, `.sqlite`, or `.sqlite3` file spawns a two-buffer workspace:
 
 - Top buffer (read-only) — shows the executed state: query result table,
   success message for writes, or error output for invalid SQL. On open, it
-  displays the database schema (tables, views, indexes, triggers) from
+  displays the database schema (tables, views, triggers) from
   `sqlite_master`.
 - Bottom buffer (editable) — a `filetype=sql` scratch buffer where you write
   SQL. Accepts anything `sqlite3` accepts, including writes and DDL.

@@ -28,15 +28,15 @@ SELECT
   tbl_name AS table_name,
   sql
 FROM sqlite_master
-WHERE type IN ('table', 'view', 'index', 'trigger')
+WHERE type IN ('table', 'view', 'trigger')
   AND name NOT LIKE 'sqlite_%'
 ORDER BY type, name;
 ]]
 
-local STARTER_HINT = {
-  "-- Write SQL here. Save the buffer (:w) to run it.",
-  "",
-}
+local STARTER_HINT = vim.list_extend(
+  { "-- Write SQL here. Save the buffer (:w) to run it.", "" },
+  vim.split(vim.trim(SCHEMA_QUERY), "\n", { plain = true })
+)
 
 ---@param buf number
 ---@param lines string[]
