@@ -155,6 +155,18 @@ The bottom buffer's contents are preserved after a run. Successful write
 statements render `Query executed successfully` in the top buffer; errors
 render `-- Error` followed by the `sqlite3` stderr.
 
+#### Configuration
+`<localleader>` defaults to `<leader>` (which defaults to `\`), so `\r` runs
+the query out of the box. To pick your own key, set `maplocalleader` in your
+`init.lua` **before** the plugin loads:
+
+```lua
+-- Example of localleader remapping.
+-- init.lua
+vim.g.mapleader = " "      -- space as global leader
+vim.g.maplocalleader = "," -- comma as local leader → ",r" runs the query
+```
+
 ## How It Works
 
 1. `BufReadCmd` hijacks supported files before Neovim reads their raw bytes.

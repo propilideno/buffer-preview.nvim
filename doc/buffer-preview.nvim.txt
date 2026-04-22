@@ -92,6 +92,15 @@ The bottom buffer's contents are preserved after a run. Successful write
 statements render `Query executed successfully` in the top buffer; errors
 render `-- Error` followed by the `sqlite3` stderr output.
 
+<localleader> defaults to <leader> (which defaults to `\`), so `\r` runs the
+query out of the box. To pick your own key, set `maplocalleader` in your
+init.lua before the plugin loads: >
+
+    vim.g.mapleader = " "      -- space as global leader
+    vim.g.maplocalleader = "," -- ",r" will run the query
+
+See |maplocalleader| for details.
+
 Closing either buffer tears down the workspace.
 
 vim:tw=78:ts=8:noet:ft=help:norl:
