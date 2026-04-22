@@ -34,7 +34,7 @@ ORDER BY type, name;
 ]]
 
 local STARTER_HINT = vim.list_extend(
-  { "-- Write SQL here. Save the buffer (:w) to run it.", "" },
+  { "-- Write SQL here. Save the buffer (:w) to run it." },
   vim.split(vim.trim(SCHEMA_QUERY), "\n", { plain = true })
 )
 
