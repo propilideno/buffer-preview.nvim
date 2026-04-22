@@ -1,4 +1,4 @@
-*buffer-preview.nvim.txt*    For Neovim >= 0.10.0            Last change: 2026-04-14
+*buffer-preview.nvim.txt*    For Neovim >= 0.10.0            Last change: 2026-04-19
 
 ==============================================================================
 Table of Contents                                 *buffer-preview.nvim-toc*
@@ -7,26 +7,38 @@ Table of Contents                                 *buffer-preview.nvim-toc*
 2. Requirements                   |buffer-preview-requirements|
 3. Configuration                  |buffer-preview-configuration|
 4. Navigation                     |buffer-preview-navigation|
+5. SQLite                         |buffer-preview-sqlite|
 
 ==============================================================================
 1. buffer-preview.nvim              *buffer-preview-introduction*
 
 buffer-preview.nvim previews non-text content by hijacking normal buffer reads.
-Instead of opening supported files as editable text, it intercepts the load and
-replaces the buffer with a read-only preview buffer. Currently
-implements PDF preview and presentation support (`.pptx`, `.ppt`, `.odp`)
-through headless `soffice` conversion, with image rendering delegated to
-image.nvim.
+Instead of opening supported files as editable text, it intercepts the load
+and replaces the buffer with a format-specific preview. Currently implements:
+
+- PDF preview
+- Presentation preview (`.pptx`, `.ppt`, `.odp`) through headless `soffice`
+  conversion, with image rendering delegated to image.nvim
+- SQLite preview (`.db`, `.sqlite`, `.sqlite3`) via the `sqlite3` CLI, with a
+  two-buffer workspace for running arbitrary queries
 
 ==============================================================================
 2. Requirements                     *buffer-preview-requirements*
 
-- Neovim >= 0.10
-- image.nvim (https://github.com/3rd/image.nvim)
-- ImageMagick (required by image.nvim)
-- `pdftoppm` or `pdftocairo` (poppler-utils)
-- `pdfinfo` (for page count)
-- `soffice` (for presentation conversion)
+Our baseline is support Neovim >= 0.10.
+Everything else depends on which preview you want, install only what you need.
+
+Image preview (PDF, `.pptx`, `.ppt`, `.odp`):
+
+- `image.nvim`: handles image rendering
+- `ImageMagick`: required by image.nvim
+- `pdftoppm`: required to convert pdf to png
+- `pdfinfo`: required to show pdf metadata
+- `soffice`: for presentation conversion (.pptx, .ppt, .odp)
+
+Data preview (`.db`, `.sqlite`, `.sqlite3`):
+
+- `sqlite3` CLI
 
 ==============================================================================
 3. Configuration                    *buffer-preview-configuration*
@@ -34,7 +46,7 @@ image.nvim.
 Call: >
     require("buffer-preview").setup({...})
 
-Current options configure the backend: >
+Current options configure the PDF / presentation rendering backend: >
 
     require("buffer-preview").setup({
       rasterizer = "pdftoppm",              -- or "pdftocairo"
@@ -43,10 +55,13 @@ Current options configure the backend: >
                   .. "/buffer-preview.nvim", -- rendered page cache
     })
 
+The SQLite backend has no configuration.
+
 ==============================================================================
 4. Navigation                       *buffer-preview-navigation*
 
-The PDF buffer is non-editable.  Only the following keys are active:
+The PDF / presentation buffer is non-editable.  Only the following keys are
+active:
 
   j, l, <Down>, ], }, <Space>, <C-d>, <C-f>     Next page
   k, h, <Up>, [, {, <C-u>, <C-b>                Previous page
@@ -55,5 +70,28 @@ The PDF buffer is non-editable.  Only the following keys are active:
   {number}G                                     Go to page {number}
   r, <C-l>                                      Refresh display
   q                                             Close viewer
+
+==============================================================================
+5. SQLite                           *buffer-preview-sqlite*
+
+Opening a `.db`, `.sqlite`, or `.sqlite3` file spawns a two-buffer workspace:
+
+- Top buffer (read-only) — shows the executed state: query result table,
+  success message for writes, or error output for invalid SQL. On open, it
+  displays the database schema (tables, views, indexes, triggers) from
+  `sqlite_master`.
+- Bottom buffer (editable) — a `filetype=sql` scratch buffer where you write
+  SQL. Accepts anything `sqlite3` accepts, including writes and DDL.
+
+Running SQL:
+
+  <localleader>r            Run the entire bottom buffer as SQL
+  :BufferPreviewRunQuery    Same as above (buffer-local command)
+
+The bottom buffer's contents are preserved after a run. Successful write
+statements render `Query executed successfully` in the top buffer; errors
+render `-- Error` followed by the `sqlite3` stderr output.
+
+Closing either buffer tears down the workspace.
 
 vim:tw=78:ts=8:noet:ft=help:norl:

@@ -26,19 +26,23 @@
 
 ## Requirements
 
-- Neovim >= 0.10
-- [image.nvim](https://github.com/3rd/image.nvim) (handles image rendering)
-- ImageMagick (required by image.nvim)
-- `pdftoppm` **or** `pdftocairo` (from `poppler` / `poppler-utils`)
-- `pdfinfo` (from `poppler` / `poppler-utils`)
+Our baseline is support Neovim >= 0.10.
 
-#### Optional: presentation
+Everything else depends on which preview you want, install only what you need.
 
-- `soffice` for presentation preview conversion (`.pptx`, `.ppt`, `.odp`)
+### Image preview
 
-#### Optional: tmux support
+For PDF and presentation files (`.pdf`, `.pptx`, `.ppt`, `.odp`):
 
-~/.tmux.conf
+- [image.nvim](https://github.com/3rd/image.nvim): handles image rendering
+- `ImageMagick`: required by image.nvim
+- `pdftoppm`: required to convert pdf to png
+- `pdfinfo`: required to show metadata (status line)
+- `soffice`: for presentation conversion (.pptx, .ppt, .odp)
+
+#### tmux support
+
+For running image preview inside tmux, add to `~/.tmux.conf`:
 
 ```tmux
 # https://github.com/3rd/image.nvim#tmux
@@ -47,6 +51,10 @@ set -g visual-activity off
 set -g focus-events on
 ```
 
+### Data preview
+
+- `sqlite3`: for SQLite files (.db, .sqlite, .sqlite3)
+
 ## Installation
 
 With [lazy.nvim](https://github.com/folke/lazy.nvim):
@@ -54,8 +62,15 @@ With [lazy.nvim](https://github.com/folke/lazy.nvim):
 ```lua
 {
   "propilideno/buffer-preview.nvim",
-  event = { "BufReadCmd *.pdf", "BufReadCmd *.pptx", "BufReadCmd *.ppt", "BufReadCmd *.odp" }, -- fires before Neovim reads the file, earlier than ft
-  dependencies = { "3rd/image.nvim" },
+  event = {
+    -- Image preview
+    "BufReadCmd *.pdf", "BufReadCmd *.pptx", "BufReadCmd *.ppt", "BufReadCmd *.odp",
+    -- Data preview
+    "BufReadCmd *.db", "BufReadCmd *.sqlite", "BufReadCmd *.sqlite3",
+  },
+  dependencies = {
+    "3rd/image.nvim", -- only needed for image preview (PDF / presentation)
+  },
   opts = {},
 }
 ```
@@ -63,15 +78,23 @@ With [lazy.nvim](https://github.com/folke/lazy.nvim):
 #### Arch Linux
 
 ```sh
+# Image preview
 sudo pacman -S poppler imagemagick \
                libreoffice-fresh # Optional: for presentation preview
+
+# Data preview
+sudo pacman -S sqlite
 ```
 
 #### Ubuntu / Debian
 
 ```sh
+# Image preview
 sudo apt install poppler-utils imagemagick \
                  libreoffice # Optional: for presentation preview
+
+# Data preview
+sudo apt install sqlite3
 ```
 
 ## Default Configuration
@@ -96,11 +119,13 @@ require("buffer-preview").setup({
 - [x] PDF support (.pdf)
 - [x] PowerPoint support (.pptx, .ppt)
 - [x] OpenDocument Presentation support (.odp)
-- [ ] SQLite support
+- [x] SQLite support (.db, .sqlite, .sqlite3)
 - [ ] Parquet support
 - [ ] Excel support
 
-## Navigation
+## Usage
+
+### PDF / Presentation
 
 | Key                                              | Action        |
 | ------------------------------------------------ | ------------- |
@@ -111,6 +136,24 @@ require("buffer-preview").setup({
 | `<number>G`                                      | Go to page N  |
 | `r` `Ctrl-l`                                     | Refresh       |
 | `q`                                              | Close viewer  |
+
+### SQLite
+
+Opening a `.db` / `.sqlite` / `.sqlite3` file spawns a two-buffer workspace:
+
+- **Top** — read-only result preview. Initially shows the database schema
+  (tables, views, indexes, triggers).
+- **Bottom** — editable SQL buffer. Write any SQL that `sqlite3` accepts,
+  including writes and DDL.
+
+| Key / Command                | Action                                    |
+| ---------------------------- | ----------------------------------------- |
+| `<localleader>r`             | Run the whole bottom buffer as SQL        |
+| `:BufferPreviewRunQuery`     | Same as above                             |
+
+The bottom buffer's contents are preserved after a run. Successful write
+statements render `Query executed successfully` in the top buffer; errors
+render `-- Error` followed by the `sqlite3` stderr.
 
 ## How It Works
 
@@ -133,11 +176,21 @@ For presentation files (`.pptx`, `.ppt`, `.odp`), the backend:
 2. Reuses the same PDF page-count, rasterization, and display pipeline
 3. Keeps the same in-buffer navigation and `Page` layout
 
+For SQLite files (`.db`, `.sqlite`, `.sqlite3`), the backend:
+
+1. Opens a two-buffer workspace: a read-only result buffer on top and an
+   editable SQL buffer on the bottom
+2. Runs an initial schema query against `sqlite_master` to orient the user
+3. Pipes the bottom buffer's contents into the `sqlite3` CLI via stdin and
+   renders the result (table / success message / error) into the top buffer
+
 ## Architecture
 
-- `plugin/buffer-preview.lua`: registers buffer hijacking for supported formats
+- `plugin/buffer-preview.lua`: dispatches buffer hijacking per backend
 - `lua/buffer-preview/converter.lua`: converts presentation files to cached PDF with `soffice`
-- `lua/buffer-preview/viewer.lua`: PDF preview buffer lifecycle
+- `lua/buffer-preview/viewer.lua`: PDF / presentation preview buffer lifecycle
 - `lua/buffer-preview/rasterizer.lua`: PDF page rasterization and cache
 - `lua/buffer-preview/display.lua`: image rendering via `image.nvim`
+- `lua/buffer-preview/data/runner.lua`: `sqlite3` CLI wrapper (data backends)
+- `lua/buffer-preview/data/viewer.lua`: two-buffer data workspace
 - `lua/buffer-preview/config.lua`: backend configuration
