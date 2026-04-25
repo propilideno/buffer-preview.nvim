@@ -45,6 +45,13 @@ for _, backend in ipairs(backends) do
       if require(backend.module)._states[buf] then
         return
       end
+      -- Skip buffers that this plugin already manages (e.g. workspace
+      -- buffers in their teardown limbo). The flag is buffer-local, so it
+      -- disappears when the buffer is wiped, letting fresh `:e file.db`
+      -- still trigger a hijack.
+      if vim.b[buf].buffer_preview_handled then
+        return
+      end
       local path = vim.api.nvim_buf_get_name(buf)
       if path ~= "" and path_has_ext(path, backend.exts) then
         require(backend.module).open(path)
