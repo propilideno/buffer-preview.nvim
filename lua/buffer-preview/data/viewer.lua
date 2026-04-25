@@ -98,19 +98,24 @@ local function setup_autocmds(state)
   local group = vim.api.nvim_create_augroup("BufferPreviewSqlite_" .. state.top_buf, { clear = true })
   state.augroup = group
 
-  local function teardown()
+  -- Tear down the companion when either buffer is unloaded. The buffer that
+  -- fired BufUnload is already being wiped by `bufhidden=wipe`, so we must
+  -- not touch it (E937). The companion delete is scheduled to avoid running
+  -- buffer ops mid-unload.
+  local function teardown(ev)
     if not M._states[state.top_buf] then
       return
     end
     M._states[state.top_buf] = nil
     M._bottom_to_top[state.bottom_buf] = nil
     pcall(vim.api.nvim_del_augroup_by_id, group)
-    if vim.api.nvim_buf_is_valid(state.bottom_buf) then
-      pcall(vim.api.nvim_buf_delete, state.bottom_buf, { force = true })
-    end
-    if vim.api.nvim_buf_is_valid(state.top_buf) then
-      pcall(vim.api.nvim_buf_delete, state.top_buf, { force = true })
-    end
+
+    local companion = ev.buf == state.top_buf and state.bottom_buf or state.top_buf
+    vim.schedule(function()
+      if vim.api.nvim_buf_is_valid(companion) then
+        pcall(vim.api.nvim_buf_delete, companion, { force = true })
+      end
+    end)
   end
 
   vim.api.nvim_create_autocmd("BufUnload", {
