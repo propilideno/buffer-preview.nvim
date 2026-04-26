@@ -6,7 +6,7 @@
 
 <p align="center">
   <img src="assets/example-pdf.png" alt="buffer-preview.nvim rendering a PDF directly inside a Neovim buffer" width="50%" />
-  <img src="assets/example-presentation.png" alt="buffer-preview.nvim rendering a PDF directly inside a Neovim buffer" width="49%" />
+  <img src="assets/example-presentation.png" alt="buffer-preview.nvim rendering a presentation directly inside a Neovim buffer" width="49%" />
 </p>
 
 <p align="center">
@@ -30,21 +30,19 @@
 
 ## Requirements
 
-Our baseline is support Neovim >= 0.10.
-
-Everything else depends on which preview you want, install only what you need.
+The requirements depends on which preview you want, install only what you need.
 
 ### Image preview
 
 For PDF and presentation files (`.pdf`, `.pptx`, `.ppt`, `.odp`):
 
 - [image.nvim](https://github.com/3rd/image.nvim): handles image rendering
-- `ImageMagick`: required by image.nvim
-- `pdftoppm`: required to convert pdf to png
-- `pdfinfo`: required to show metadata (status line)
-- `soffice`: for presentation conversion (.pptx, .ppt, .odp)
+- ImageMagick: required by image.nvim
+- pdftoppm: required to convert pdf to png
+- pdfinfo: required to show metadata (status line)
+- soffice: for presentation conversion (.pptx, .ppt, .odp)
 
-#### tmux support
+#### Tmux support
 
 For running image preview inside tmux, add to `~/.tmux.conf`:
 
@@ -57,7 +55,7 @@ set -g focus-events on
 
 ### Data preview
 
-- `sqlite3`: for SQLite files (.db, .sqlite, .sqlite3)
+- sqlite3: for SQLite files (.db, .sqlite, .sqlite3)
 
 ## Installation
 
@@ -82,22 +80,22 @@ With [lazy.nvim](https://github.com/folke/lazy.nvim):
 #### Arch Linux
 
 ```sh
-# Image preview
+# Image preview dependencies
 sudo pacman -S poppler imagemagick \
                libreoffice-fresh # Optional: for presentation preview
 
-# Data preview
+# Data preview dependencies
 sudo pacman -S sqlite
 ```
 
 #### Ubuntu / Debian
 
 ```sh
-# Image preview
+# Image preview dependencies
 sudo apt install poppler-utils imagemagick \
                  libreoffice # Optional: for presentation preview
 
-# Data preview
+# Data preview dependencies
 sudo apt install sqlite3
 ```
 
@@ -152,8 +150,7 @@ Opening a `.db` / `.sqlite` / `.sqlite3` file spawns a two-buffer workspace:
 
 | Key / Command                | Action                                    |
 | ---------------------------- | ----------------------------------------- |
-| `:w` (save the buffer)       | Run the whole bottom buffer as SQL        |
-| `:BufferPreviewRunQuery`     | Same as above                             |
+| `:w` (save the buffer)<br>`:BufferPreviewRunQuery` | Run the whole bottom buffer as SQL |
 
 The bottom buffer's contents are preserved after a run. Successful write
 statements render `Query executed successfully` in the top buffer; errors
