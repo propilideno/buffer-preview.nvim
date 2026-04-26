@@ -150,12 +150,23 @@ local function setup_autocmds(state)
     if not M._states[state.top_buf] then
       return
     end
+    -- Reflowing the layout under the cursor mid-edit is jarring; skip
+    -- non-normal modes.
+    if vim.fn.mode() ~= "n" then
+      return
+    end
 
     refresh_role_wins()
 
     local current_win = vim.api.nvim_get_current_win()
     local current_buf = vim.api.nvim_get_current_buf()
     local in_workspace = current_buf == state.top_buf or current_buf == state.bottom_buf
+
+    -- Skip transient/special buffers (plugin scratch, help, qf, terminal,
+    -- etc.). Only workspace buffers and regular files should drive layout.
+    if not in_workspace and vim.bo[current_buf].buftype ~= "" then
+      return
+    end
 
     syncing = true
 
