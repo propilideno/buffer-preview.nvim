@@ -207,10 +207,8 @@ local function setup_autocmds(state)
       return
     end
 
-    -- Adopt the current window into the matching role *only* if our existing
-    -- role window is gone or no longer shows the right buffer. Overwriting a
-    -- valid tracked role window leaves it untracked, which later confuses
-    -- collapse and "create companion" into producing a 3rd split.
+    -- Only adopt the current window when the tracked role window is missing
+    -- or no longer shows the expected buffer.
     local function role_in_sync(win, buf)
       return win_valid(win) and vim.api.nvim_win_get_buf(win) == buf
     end
