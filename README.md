@@ -10,6 +10,10 @@
 </p>
 
 <p align="center">
+  <img src="assets/example-sqlite.png" alt="buffer-preview.nvim opening a SQLite database in a two-buffer SQL workspace" width="100%" />
+</p>
+
+<p align="center">
   <code>buffer-preview.nvim</code> hijacks the normal buffer read for supported
   files and replaces raw bytes with a read-only, navigable in-buffer preview.
   Keep the document inside Neovim, move with familiar Vim keys, and avoid
