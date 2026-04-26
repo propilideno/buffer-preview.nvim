@@ -25,8 +25,7 @@ and replaces the buffer with a format-specific preview. Currently implements:
 ==============================================================================
 2. Requirements                     *buffer-preview-requirements*
 
-Our baseline is support Neovim >= 0.10.
-Everything else depends on which preview you want, install only what you need.
+The requirements depends on which preview you want, install only what you need.
 
 Image preview (PDF, `.pptx`, `.ppt`, `.odp`):
 
