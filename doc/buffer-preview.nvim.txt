@@ -86,7 +86,7 @@ Opening a `.db`, `.sqlite`, or `.sqlite3` file spawns a two-buffer workspace:
 Running SQL:
 
   :w                        Run the entire bottom buffer as SQL
-  :BufferPreviewRunQuery    Same as above (buffer-local command)
+  :BufferPreviewRunQuery    Run the entire bottom buffer as SQL
 
 Saving the SQL buffer with `:w` hijacks the write via |BufWriteCmd| — nothing
 touches disk, the SQL just runs and the result renders into the top buffer.
