@@ -336,6 +336,8 @@ function M.open(source_path)
   vim.bo[bottom_buf].buftype = "acwrite"
   vim.bo[bottom_buf].bufhidden = "hide"
   vim.bo[bottom_buf].swapfile = false
+  -- Skip the built-in SQL ftplugin to avoid disruptive sqlcomplete mappings and transient UI side effects.
+  vim.b[bottom_buf].did_ftplugin = 1
   vim.bo[bottom_buf].filetype = "sql"
   pcall(
     vim.api.nvim_buf_set_name,
