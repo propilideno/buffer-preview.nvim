@@ -1,8 +1,8 @@
 --- PDF viewer buffer management for buffer-preview.nvim phase 1.
 --- Handles buffer hijacking, keymaps, page state, and display lifecycle.
-local converter = require("buffer-preview.converter")
-local rasterizer = require("buffer-preview.rasterizer")
-local display = require("buffer-preview.display")
+local converter = require("buffer-preview.image.converter")
+local rasterizer = require("buffer-preview.image.rasterizer")
+local display = require("buffer-preview.image.display")
 
 local M = {}
 
