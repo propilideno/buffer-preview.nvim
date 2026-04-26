@@ -1,34 +1,28 @@
 # buffer-preview.nvim
 
-<p align="center">
-  Give your Neovim buffers real previews instead of raw file bytes.
-</p>
+<div align="center">
 
-<p align="center">
-  <img src="assets/example-pdf.png" alt="buffer-preview.nvim rendering a PDF directly inside a Neovim buffer" width="50%" />
-  <img src="assets/example-presentation.png" alt="buffer-preview.nvim rendering a presentation directly inside a Neovim buffer" width="49%" />
-</p>
+Give your Neovim buffers real previews instead of raw file bytes.
 
-<p align="center">
-  <img src="assets/example-sqlite.png" alt="buffer-preview.nvim opening a SQLite database in a two-buffer SQL workspace" width="100%" />
-</p>
+![Neovim version](https://img.shields.io/badge/Neovim-0.10.0%2B-57A143?style=for-the-badge&labelColor=1E1E2E)
+![License](https://img.shields.io/github/license/propilideno/buffer-preview.nvim?style=for-the-badge&labelColor=1E1E2E&color=3B8ED0)
+![Last Release](https://img.shields.io/github/v/release/propilideno/buffer-preview.nvim?style=for-the-badge&labelColor=1E1E2E&color=3B8ED0)
+![GitHub issues](https://img.shields.io/github/issues/propilideno/buffer-preview.nvim?style=for-the-badge&labelColor=1E1E2E&color=3B8ED0)
+![GitHub last commit](https://img.shields.io/github/last-commit/propilideno/buffer-preview.nvim?style=for-the-badge&labelColor=1E1E2E&color=3B8ED0)
 
-<p align="center">
-  <code>buffer-preview.nvim</code> hijacks the normal buffer read for supported
-  files and replaces raw bytes with a read-only, navigable in-buffer preview.
-  Keep the document inside Neovim, move with familiar Vim keys, and avoid
-  context-switching to a separate viewer.
-</p>
+[Features](#features) • [Install](#installation) • [Usage](#usage)
 
-<p align="center">
-  <a href="https://www.star-history.com/?repos=propilideno%2Fbuffer-preview.nvim&type=date&legend=top-left">
-   <picture>
-     <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=propilideno/buffer-preview.nvim&type=Date&theme=dark&legend=top-left" />
-     <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=propilideno/buffer-preview.nvim&type=Date&legend=top-left" />
-     <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=propilideno/buffer-preview.nvim&type=date&legend=top-left" width="600"/>
-   </picture>
-  </a>
-</p>
+<img src="assets/example-pdf.png" alt="buffer-preview.nvim rendering a PDF directly inside a Neovim buffer" width="50%" />
+<img src="assets/example-presentation.png" alt="buffer-preview.nvim rendering a presentation directly inside a Neovim buffer" width="49%" />
+
+<img src="assets/example-sqlite.png" alt="buffer-preview.nvim opening a SQLite database in a two-buffer SQL workspace" width="100%" />
+
+`buffer-preview.nvim` hijacks the normal buffer read for supported
+files and replaces raw bytes with a read-only, navigable in-buffer preview.
+Keep the document inside Neovim, move with familiar Vim keys, and avoid
+context-switching to a separate viewer.
+
+</div>
 
 ## Requirements
 
@@ -197,3 +191,15 @@ For SQLite files (`.db`, `.sqlite`, `.sqlite3`), the backend:
 - `lua/buffer-preview/data/runner.lua`: `sqlite3` CLI wrapper (data backends)
 - `lua/buffer-preview/data/viewer.lua`: two-buffer data workspace
 - `lua/buffer-preview/config.lua`: backend configuration
+
+## Star History
+
+<p align="center">
+  <a href="https://www.star-history.com/?repos=propilideno%2Fbuffer-preview.nvim&type=date&legend=top-left">
+   <picture>
+     <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=propilideno/buffer-preview.nvim&type=Date&theme=dark&legend=top-left" />
+     <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=propilideno/buffer-preview.nvim&type=Date&legend=top-left" />
+     <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=propilideno/buffer-preview.nvim&type=date&legend=top-left" width="600"/>
+   </picture>
+  </a>
+</p>
