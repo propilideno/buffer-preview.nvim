@@ -1,7 +1,7 @@
 <div align="center">
 
 <h1>
-  <img src="assets/logo.svg" alt="buffer-preview.nvim logo" width="45" height="45" style="vertical-align: middle; margin-right: 1px;" />
+  <img src="assets/logo.svg" alt="buffer-preview.nvim logo" width="45" height="45" align="absmiddle" />
   buffer-preview.nvim
 </h1>
 
