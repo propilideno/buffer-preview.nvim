@@ -1,6 +1,9 @@
-# buffer-preview.nvim
-
 <div align="center">
+
+<h1>
+  <img src="assets/logo.svg" alt="buffer-preview.nvim logo" width="45" height="45" style="vertical-align: middle; margin-right: 1px;" />
+  buffer-preview.nvim
+</h1>
 
 Give your Neovim buffers real previews instead of raw file bytes.
 
