@@ -62,13 +62,13 @@ The SQLite backend has no configuration.
 The PDF / presentation buffer is non-editable.  Only the following keys are
 active:
 
-  j, l, <Down>, ], }, <Space>, <C-d>, <C-f>     Next page
-  k, h, <Up>, [, {, <C-u>, <C-b>                Previous page
-  g                                             First page
-  G                                             Last page
-  {number}G                                     Go to page {number}
-  r, <C-l>                                      Refresh display
-  q                                             Close viewer
+  j, l, <Down>, ], }, <Space>, <C-d>, <C-f>, <ScrollWheelDown>    Next page
+  k, h, <Up>,   [, {, <C-u>,   <C-b>,        <ScrollWheelUp>      Previous page
+  g                                                               First page
+  G                                                               Last page
+  {number}G                                                       Go to page {number}
+  r, <C-l>                                                        Refresh display
+  q                                                               Close viewer
 
 ==============================================================================
 5. SQLite                           *buffer-preview-sqlite*

@@ -104,14 +104,14 @@ local function setup_keymaps(state)
   local opts = { buffer = buf, noremap = true, silent = true, nowait = true }
 
   -- Next page
-  for _, key in ipairs({ "j", "<Down>", "]", "}", "<C-d>", "<C-f>", "<Space>", "l" }) do
+  for _, key in ipairs({ "j", "<Down>", "]", "}", "<C-d>", "<C-f>", "<Space>", "l", "<ScrollWheelDown>" }) do
     vim.keymap.set("n", key, function()
       goto_page(state, state.current_page + 1)
     end, opts)
   end
 
   -- Previous page
-  for _, key in ipairs({ "k", "<Up>", "[", "{", "<C-u>", "<C-b>", "h" }) do
+  for _, key in ipairs({ "k", "<Up>", "[", "{", "<C-u>", "<C-b>", "h", "<ScrollWheelUp>" }) do
     vim.keymap.set("n", key, function()
       goto_page(state, state.current_page - 1)
     end, opts)
