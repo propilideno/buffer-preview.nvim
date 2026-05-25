@@ -104,18 +104,39 @@ local function setup_keymaps(state)
   local opts = { buffer = buf, noremap = true, silent = true, nowait = true }
 
   -- Next page
-  for _, key in ipairs({ "j", "<Down>", "]", "}", "<C-d>", "<C-f>", "<Space>", "l", "<ScrollWheelDown>" }) do
+  for _, key in ipairs({ "j", "<Down>", "]", "}", "<C-d>", "<C-f>", "<Space>", "l" }) do
     vim.keymap.set("n", key, function()
       goto_page(state, state.current_page + 1)
     end, opts)
   end
 
   -- Previous page
-  for _, key in ipairs({ "k", "<Up>", "[", "{", "<C-u>", "<C-b>", "h", "<ScrollWheelUp>" }) do
+  for _, key in ipairs({ "k", "<Up>", "[", "{", "<C-u>", "<C-b>", "h" }) do
     vim.keymap.set("n", key, function()
       goto_page(state, state.current_page - 1)
     end, opts)
   end
+
+  -- Mouse-wheel only flips the page when the pointer is over the PDF
+  -- window. When the pointer is elsewhere, return the original keystroke so
+  -- Vim re-processes it unmapped — that way the user's own `'mousescroll'`
+  -- (and any global wheel mapping) decides what happens. The page flip
+  -- itself is deferred with `vim.schedule` because `<expr>` mappings run
+  -- under textlock, which forbids buffer/window mutations.
+  local function scroll(direction, fallback)
+    if vim.fn.getmousepos().winid == state.pdf_win then
+      vim.schedule(function()
+        if M._states[state.buf] then
+          goto_page(state, state.current_page + direction)
+        end
+      end)
+      return ""
+    end
+    return fallback
+  end
+  local scroll_opts = vim.tbl_extend("force", opts, { expr = true, replace_keycodes = true })
+  vim.keymap.set("n", "<ScrollWheelDown>", function() return scroll(1, "<ScrollWheelDown>") end, scroll_opts)
+  vim.keymap.set("n", "<ScrollWheelUp>", function() return scroll(-1, "<ScrollWheelUp>") end, scroll_opts)
 
   -- First page (bare `g` with nowait)
   vim.keymap.set("n", "g", function()
